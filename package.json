@@ -1,6 +1,6 @@
 {
   "name": "read-tsconfig-sync",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Loads tsconfig.json files including extends",
   "keywords": [
     "read",
