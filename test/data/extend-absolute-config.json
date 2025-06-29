@@ -1,16 +1,6 @@
 {
-  "extends": "read-tsconfig-sync",
+  "extends": "@sourcegraph/tsconfig",
   "compilerOptions": {
-    "skipLibCheck": true,
-    "outDir": "dist",
-    "lib": ["es2015"],
-    "target": "es2020",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "verbatimModuleSyntax": true,
-    "downlevelIteration": true,
-    "allowJs": true
+    "moduleResolution": "classic"
   }
 }

@@ -36,7 +36,7 @@
   "scripts": {
     "build": "tsds build",
     "format": "biome check --write --unsafe",
-    "test": "tsds link && mocha --no-timeouts test/**/*.test.* && tsds unlink",
+    "test": "mocha --no-timeouts test/**/*.test.*",
     "test:engines": "nvu engines tsds test:node --no-timeouts",
     "version": "tsds version"
   },
@@ -46,6 +46,7 @@
     "remove-bom-buffer": "^3.0.0"
   },
   "devDependencies": {
+    "@sourcegraph/tsconfig": "*",
     "@types/mocha": "*",
     "@types/node": "*"
   },
