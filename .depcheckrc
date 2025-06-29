@@ -1,1 +1,1 @@
-ignores: ["read-tsconfig-sync"]
+ignores: ["read-tsconfig-sync", "@sourcegraph/tsconfig"]
