@@ -36,7 +36,7 @@
   "scripts": {
     "build": "tsds build",
     "format": "biome check --write --unsafe",
-    "test": "mocha --no-timeouts test/**/*.test.*",
+    "test": "tsds link && mocha --no-timeouts test/**/*.test.* && tsds unlink",
     "test:engines": "nvu engines tsds test:node --no-timeouts",
     "version": "tsds version"
   },
