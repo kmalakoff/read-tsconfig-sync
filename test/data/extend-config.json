@@ -1,0 +1,19 @@
+{
+  "extends": "./base-config.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "lib": ["es2015"],
+    "target": "es2020",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+    "downlevelIteration": true,
+    "allowJs": true,
+    "jsx": "react-jsx"
+  },
+  "exclude": ["node_modules"],
+  "include": ["src"]
+}
