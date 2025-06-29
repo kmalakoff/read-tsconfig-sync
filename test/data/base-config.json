@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true
+  },
+  "exclude": ["junk1"],
+  "include": ["junk2"]
+}

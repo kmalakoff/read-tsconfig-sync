@@ -1,0 +1,58 @@
+{
+  "name": "read-tsconfig-sync",
+  "version": "0.0.0",
+  "description": "Loads tsconfig.json files including extends",
+  "keywords": [
+    "read",
+    "load",
+    "get",
+    "ts",
+    "typescript",
+    "tsconfig",
+    "tsconfig.json",
+    "sync"
+  ],
+  "homepage": "https://github.com/kmalakoff/read-tsconfig-sync",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kmalakoff/read-tsconfig-sync.git"
+  },
+  "license": "MIT",
+  "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json",
+    "./tsconfig.json": "./tsconfig.json"
+  },
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.cts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsds build",
+    "format": "biome check --write --unsafe",
+    "test": "mocha --no-timeouts test/**/*.test.*",
+    "test:engines": "nvu engines tsds test:node --no-timeouts",
+    "version": "tsds version"
+  },
+  "dependencies": {
+    "is-absolute": "^1.0.0",
+    "module-root-sync": "^1.2.0",
+    "remove-bom-buffer": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "*",
+    "@types/node": "*"
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
+  "tsds": {
+    "source": "src/index.ts"
+  }
+}
