@@ -41,9 +41,9 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "is-absolute": "^1.0.0",
-    "module-root-sync": "^1.2.0",
-    "remove-bom-buffer": "^3.0.0"
+    "is-absolute": "*",
+    "module-root-sync": "*",
+    "remove-bom-buffer": "*"
   },
   "devDependencies": {
     "@sourcegraph/tsconfig": "*",
