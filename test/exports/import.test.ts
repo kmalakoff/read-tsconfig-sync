@@ -1,5 +1,4 @@
 import assert from 'assert';
-// @ts-ignore
 import readSync from 'read-tsconfig-sync';
 
 describe('exports .ts', () => {

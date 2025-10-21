@@ -1,6 +1,5 @@
 import assert from 'assert';
 import path from 'path';
-// @ts-ignore
 import readSync from 'read-tsconfig-sync';
 import url from 'url';
 
