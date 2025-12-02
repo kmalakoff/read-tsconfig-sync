@@ -37,7 +37,7 @@
     "build": "tsds build",
     "format": "biome check --write --unsafe",
     "prepublishOnly": "tsds validate",
-    "test": "mocha --no-timeouts test/**/*.test.*",
+    "test": "tsds test:node --no-timeouts",
     "test:engines": "nvu engines tsds test:node --no-timeouts",
     "version": "tsds version"
   },
@@ -47,9 +47,12 @@
     "remove-bom-buffer": "*"
   },
   "devDependencies": {
+    "@biomejs/biome": "*",
     "@sourcegraph/tsconfig": "*",
     "@types/mocha": "*",
-    "@types/node": "*"
+    "@types/node": "*",
+    "node-version-use": "*",
+    "ts-dev-stack": "*"
   },
   "engines": {
     "node": ">=0.8"
