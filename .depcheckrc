@@ -1,1 +1,1 @@
-ignores: ["read-tsconfig-sync", "@sourcegraph/tsconfig"]
+ignores: ["node-version-use", "ts-dev-stack", "@biomejs/biome", "read-tsconfig-sync", "@sourcegraph/tsconfig"]
