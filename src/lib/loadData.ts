@@ -2,12 +2,12 @@ import fs from 'fs';
 import isAbsolute from 'is-absolute';
 import path from 'path';
 import removeBOM from 'remove-bom-buffer';
-import resolve from 'resolve';
+import * as resolve from 'resolve';
 import type { TSConfig, TSConfigSchema } from '../types.ts';
 import mergeData from './mergeData.ts';
 import parseJSONC from './parseJSONC.ts';
 
-const resolveSync = resolve.sync;
+const resolveSync = resolve.sync || resolve.default.sync;
 const isArray = Array.isArray || ((x) => Object.prototype.toString.call(x) === '[object Array]');
 const moduleRegEx = /^[^./]|^\.[^./]|^\.\.[^/]/;
 const pathRegEx = /\\|\//;
