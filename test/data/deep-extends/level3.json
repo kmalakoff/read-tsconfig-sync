@@ -1,0 +1,8 @@
+{
+  "extends": "./level2.json",
+  "compilerOptions": {
+    "target": "es2020",
+    "outDir": "dist"
+  },
+  "include": ["level3-src"]
+}
