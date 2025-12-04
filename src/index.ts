@@ -7,7 +7,10 @@ export * from './types.ts';
 
 export default function loadConfigSync(dir: string, name?: string): TSConfig {
   if (name === undefined) name = 'tsconfig.json';
-  const configDir = moduleRoot(dir, { name });
+  let configDir: string | null = null;
+  try {
+    configDir = moduleRoot(dir, { name });
+  } catch (_) {}
   if (!configDir) return null;
 
   const configPath = path.join(configDir, name);
