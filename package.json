@@ -37,6 +37,7 @@
   "scripts": {
     "build": "tsds build",
     "format": "biome check --write --unsafe",
+    "generate:schema": "node scripts/generate-schema.mjs",
     "prepublishOnly": "tsds validate",
     "test": "tsds test:node --no-timeouts",
     "test:engines": "nvu engines tsds test:node --no-timeouts",
@@ -52,6 +53,7 @@
     "@sourcegraph/tsconfig": "*",
     "@types/mocha": "*",
     "@types/node": "*",
+    "json-schema-to-typescript": "*",
     "node-version-use": "*",
     "ts-dev-stack": "*"
   },
