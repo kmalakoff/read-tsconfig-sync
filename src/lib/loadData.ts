@@ -21,8 +21,11 @@ export default function loadData(specifier: string): TSConfig {
   while (extendSpecifiers.length) {
     var extendSpecifier = extendSpecifiers.shift();
     if (moduleRegEx.test(extendSpecifier)) {
-      const requirePath = resolveSync(extendSpecifier, { basedir: path.dirname(specifier) });
-      extendSpecifier = pathRegEx.test(extendSpecifier) ? requirePath : path.join.apply(null, requirePath.split(extendSpecifier).slice(0, -1).concat([extendSpecifier, 'tsconfig.json']));
+      // For bare package names (no path separator), resolve package.json then derive tsconfig.json path
+      const hasSubpath = pathRegEx.test(extendSpecifier);
+      const resolveTarget = hasSubpath ? extendSpecifier : `${extendSpecifier}/package.json`;
+      const requirePath = resolveSync(resolveTarget, { basedir: path.dirname(specifier) });
+      extendSpecifier = hasSubpath ? requirePath : path.join(path.dirname(requirePath), 'tsconfig.json');
     }
 
     const baseConfig = loadData(isAbsolute(extendSpecifier) ? extendSpecifier : path.join(path.dirname(tsconfig.path), extendSpecifier));
