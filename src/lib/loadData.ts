@@ -9,7 +9,7 @@ import mergeData from './mergeData.ts';
 const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
 const isArray = Array.isArray || ((x) => Object.prototype.toString.call(x) === '[object Array]');
 const moduleRegEx = /^[^./]|^\.[^./]|^\.\.[^/]/;
-const pathRegEx = /\\|\//g;
+const pathRegEx = /\\|\//;
 
 export default function loadData(specifier: string): TSConfig {
   const tsconfig = { path: specifier, config: JSON.parse(removeBOM(fs.readFileSync(specifier, 'utf8'))) };
