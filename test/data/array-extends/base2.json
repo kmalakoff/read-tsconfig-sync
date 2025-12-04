@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "sourceMap": true
+  },
+  "include": ["base2-src"],
+  "exclude": ["base2-exclude"]
+}
