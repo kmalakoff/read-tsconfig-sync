@@ -1,4 +1,5 @@
 import assert from 'assert';
+import fs from 'fs';
 import path from 'path';
 import readSync from 'read-tsconfig-sync';
 import url from 'url';
@@ -61,6 +62,50 @@ describe('read', () => {
 });
 
 describe('module resolution', () => {
+  // Setup for Windows regression test: create a mock package without a main entry point
+  const mockPkgDir = path.join(DATA_DIR, 'node_modules', 'no-main-pkg');
+  const mockConfigPath = path.join(DATA_DIR, 'extend-no-main-pkg.json');
+
+  before(() => {
+    if (!fs.existsSync(mockPkgDir)) fs.mkdirSync(mockPkgDir, { recursive: true });
+    fs.writeFileSync(path.join(mockPkgDir, 'package.json'), JSON.stringify({ name: 'no-main-pkg', version: '1.0.0' }));
+    fs.writeFileSync(path.join(mockPkgDir, 'tsconfig.json'), JSON.stringify({ compilerOptions: { target: 'ES2020' } }));
+    fs.writeFileSync(mockConfigPath, JSON.stringify({ extends: 'no-main-pkg', compilerOptions: { strict: true } }));
+  });
+
+  after(() => {
+    try {
+      fs.unlinkSync(path.join(mockPkgDir, 'package.json'));
+    } catch (_e) {
+      /* ignore */
+    }
+    try {
+      fs.unlinkSync(path.join(mockPkgDir, 'tsconfig.json'));
+    } catch (_e) {
+      /* ignore */
+    }
+    try {
+      fs.rmdirSync(mockPkgDir);
+    } catch (_e) {
+      /* ignore */
+    }
+    try {
+      fs.unlinkSync(mockConfigPath);
+    } catch (_e) {
+      /* ignore */
+    }
+  });
+
+  it('extends package without main entry point (Windows regression)', () => {
+    // This test catches a Windows-specific bug where resolve.sync fails on packages
+    // without a "main" field in package.json. The fix resolves package.json instead
+    // of the bare package name, then derives the tsconfig.json path from its directory.
+    const tsconfig = readSync(DATA_DIR, 'extend-no-main-pkg.json');
+    assert.equal(tsconfig.path, path.join(DATA_DIR, 'extend-no-main-pkg.json'));
+    assert.equal(tsconfig.config.compilerOptions.strict, true);
+    assert.equal(tsconfig.config.compilerOptions.target, 'ES2020');
+  });
+
   it('extends non-scoped package (tsds-config)', () => {
     const tsconfig = readSync(DATA_DIR, 'extend-module.json');
     assert.equal(tsconfig.path, path.join(DATA_DIR, 'extend-module.json'));
