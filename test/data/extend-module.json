@@ -1,0 +1,6 @@
+{
+  "extends": "tsds-config",
+  "compilerOptions": {
+    "strict": true
+  }
+}
