@@ -7,7 +7,7 @@ import type { TSConfig, TSConfigSchema } from '../types.ts';
 import mergeData from './mergeData.ts';
 import parseJSONC from './parseJSONC.ts';
 
-const resolveSync = resolve.sync || resolve.default.sync;
+const resolveSync = (resolve.default ?? resolve).sync;
 const isArray = Array.isArray || ((x) => Object.prototype.toString.call(x) === '[object Array]');
 const moduleRegEx = /^[^./]|^\.[^./]|^\.\.[^/]/;
 const pathRegEx = /\\|\//;
