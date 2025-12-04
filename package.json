@@ -36,7 +36,7 @@
   ],
   "scripts": {
     "build": "tsds build",
-    "format": "biome check --write --unsafe",
+    "format": "tsds format",
     "generate:schema": "node scripts/generate-schema.mjs",
     "prepublishOnly": "tsds validate",
     "test": "tsds test:node --no-timeouts",
@@ -46,16 +46,17 @@
   "dependencies": {
     "is-absolute": "*",
     "module-root-sync": "*",
-    "remove-bom-buffer": "*"
+    "remove-bom-buffer": "*",
+    "resolve": "*"
   },
   "devDependencies": {
-    "@biomejs/biome": "*",
     "@sourcegraph/tsconfig": "*",
     "@types/mocha": "*",
     "@types/node": "*",
     "json-schema-to-typescript": "*",
     "node-version-use": "*",
-    "ts-dev-stack": "*"
+    "ts-dev-stack": "*",
+    "tsds-config": "*"
   },
   "engines": {
     "node": ">=0.8"
