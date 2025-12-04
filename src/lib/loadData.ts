@@ -1,13 +1,13 @@
 import fs from 'fs';
 import isAbsolute from 'is-absolute';
-import Module from 'module';
 import path from 'path';
 import removeBOM from 'remove-bom-buffer';
+import resolve from 'resolve';
 import type { TSConfig, TSConfigSchema } from '../types.ts';
 import mergeData from './mergeData.ts';
 import parseJSONC from './parseJSONC.ts';
 
-const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
+const resolveSync = resolve.sync;
 const isArray = Array.isArray || ((x) => Object.prototype.toString.call(x) === '[object Array]');
 const moduleRegEx = /^[^./]|^\.[^./]|^\.\.[^/]/;
 const pathRegEx = /\\|\//;
@@ -21,7 +21,7 @@ export default function loadData(specifier: string): TSConfig {
   while (extendSpecifiers.length) {
     var extendSpecifier = extendSpecifiers.shift();
     if (moduleRegEx.test(extendSpecifier)) {
-      const requirePath = _require.resolve(extendSpecifier, { paths: [specifier] });
+      const requirePath = resolveSync(extendSpecifier, { basedir: path.dirname(specifier) });
       extendSpecifier = pathRegEx.test(extendSpecifier) ? requirePath : path.join.apply(null, requirePath.split(extendSpecifier).slice(0, -1).concat([extendSpecifier, 'tsconfig.json']));
     }
 

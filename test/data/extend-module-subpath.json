@@ -1,0 +1,6 @@
+{
+  "extends": "tsds-config/tsconfig.json",
+  "compilerOptions": {
+    "strict": true
+  }
+}
