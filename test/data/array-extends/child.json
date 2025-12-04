@@ -1,0 +1,6 @@
+{
+  "extends": ["./base1.json", "./base2.json"],
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
