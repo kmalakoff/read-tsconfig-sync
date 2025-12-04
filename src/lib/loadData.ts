@@ -3,8 +3,9 @@ import isAbsolute from 'is-absolute';
 import Module from 'module';
 import path from 'path';
 import removeBOM from 'remove-bom-buffer';
-import type { TSConfig } from '../types.ts';
+import type { TSConfig, TSConfigSchema } from '../types.ts';
 import mergeData from './mergeData.ts';
+import parseJSONC from './parseJSONC.ts';
 
 const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
 const isArray = Array.isArray || ((x) => Object.prototype.toString.call(x) === '[object Array]');
@@ -12,7 +13,7 @@ const moduleRegEx = /^[^./]|^\.[^./]|^\.\.[^/]/;
 const pathRegEx = /\\|\//;
 
 export default function loadData(specifier: string): TSConfig {
-  const tsconfig = { path: specifier, config: JSON.parse(removeBOM(fs.readFileSync(specifier, 'utf8'))) };
+  const tsconfig = { path: specifier, config: parseJSONC(removeBOM(fs.readFileSync(specifier, 'utf8'))) as TSConfigSchema.TSConfigData };
   if (tsconfig.config.extends === undefined) return tsconfig;
 
   var extendData = {};

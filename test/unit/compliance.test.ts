@@ -110,4 +110,139 @@ describe('TypeScript tsconfig.json compliance', () => {
       assert.equal(result.config.extends, undefined, 'extends should be removed from final config');
     });
   });
+
+  describe('references inheritance (should NOT inherit)', () => {
+    var REFS_DIR = path.join(DATA_DIR, 'references');
+
+    it('should NOT inherit references from base config', () => {
+      // TypeScript spec: references is excluded from inheritance
+      var result = readSync(REFS_DIR, 'child-no-refs.json');
+
+      // Base has references, child does not define any
+      // Result should NOT have references (they are not inherited)
+      assert.equal(result.config.references, undefined, 'references should NOT be inherited from base');
+    });
+
+    it('should use child references when defined', () => {
+      var result = readSync(REFS_DIR, 'child-own-refs.json');
+
+      // Child defines its own references
+      assert.deepEqual(result.config.references, [{ path: '../other' }], 'child references should be used');
+    });
+
+    it('should inherit other properties while excluding references', () => {
+      var result = readSync(REFS_DIR, 'child-no-refs.json');
+
+      // compilerOptions should still be inherited
+      assert.equal(result.config.compilerOptions.composite, true, 'composite should be inherited');
+      assert.equal(result.config.compilerOptions.target, 'es2020', 'target should be inherited');
+      assert.equal(result.config.compilerOptions.outDir, 'dist', 'child outDir should be present');
+    });
+  });
+
+  describe('compilerOptions arrays (replaced, not merged)', () => {
+    var ARRAYS_DIR = path.join(DATA_DIR, 'compiler-options-arrays');
+
+    it('should replace lib array (not merge)', () => {
+      var result = readSync(ARRAYS_DIR, 'child.json');
+
+      // Base has lib: ["es5", "dom"], child has lib: ["es2020"]
+      // Child's lib should completely replace base's lib
+      assert.deepEqual(result.config.compilerOptions.lib, ['es2020'], 'lib should be replaced, not merged');
+    });
+
+    it('should replace paths object (not merge)', () => {
+      var result = readSync(ARRAYS_DIR, 'child.json');
+
+      // Base has paths with @utils/* and @common/*, child has only @app/*
+      // Child's paths should completely replace base's paths
+      assert.deepEqual(result.config.compilerOptions.paths, { '@app/*': ['src/app/*'] }, 'paths should be replaced, not merged');
+    });
+
+    it('should inherit arrays when child does not override', () => {
+      var result = readSync(ARRAYS_DIR, 'child.json');
+
+      // Base has types: ["node", "jest"], child does not define types
+      assert.deepEqual(result.config.compilerOptions.types, ['node', 'jest'], 'types should be inherited from base');
+
+      // Base has typeRoots: ["./base-types"], child does not define typeRoots
+      assert.deepEqual(result.config.compilerOptions.typeRoots, ['./base-types'], 'typeRoots should be inherited from base');
+    });
+  });
+
+  describe('deep/nested extends chains', () => {
+    var DEEP_DIR = path.join(DATA_DIR, 'deep-extends');
+
+    it('should resolve deep extends chain (A extends B extends C)', () => {
+      var result = readSync(DEEP_DIR, 'level3.json');
+
+      // level1: target=es5, strict=true, include=["level1-src"]
+      // level2 extends level1: target=es2015, module=commonjs
+      // level3 extends level2: target=es2020, outDir=dist, include=["level3-src"]
+
+      // target should be from level3 (overrides level2 which overrides level1)
+      assert.equal(result.config.compilerOptions.target, 'es2020', 'target from level3');
+
+      // module should be from level2 (level3 doesn't override)
+      assert.equal(result.config.compilerOptions.module, 'commonjs', 'module from level2');
+
+      // strict should be from level1 (not overridden)
+      assert.equal(result.config.compilerOptions.strict, true, 'strict from level1');
+
+      // outDir should be from level3
+      assert.equal(result.config.compilerOptions.outDir, 'dist', 'outDir from level3');
+
+      // include should be from level3 (replaces level1's include)
+      assert.deepEqual(result.config.include, ['level3-src'], 'include from level3');
+    });
+  });
+
+  describe('other top-level options (replaced, not merged)', () => {
+    var OPTIONS_DIR = path.join(DATA_DIR, 'other-options');
+
+    it('should replace watchOptions (not merge)', () => {
+      var result = readSync(OPTIONS_DIR, 'child.json');
+
+      // Base has watchOptions with watchFile and watchDirectory
+      // Child defines watchOptions with only watchFile
+      // Child's watchOptions should completely replace base's
+      assert.deepEqual(result.config.watchOptions, { watchFile: 'dynamicPriorityPolling' }, 'watchOptions should be replaced, not merged');
+    });
+
+    it('should inherit buildOptions when child does not define', () => {
+      var result = readSync(OPTIONS_DIR, 'child.json');
+
+      // Child does not define buildOptions, should inherit from base
+      assert.deepEqual(result.config.buildOptions, { verbose: true }, 'buildOptions should be inherited');
+    });
+
+    it('should inherit typeAcquisition when child does not define', () => {
+      var result = readSync(OPTIONS_DIR, 'child.json');
+
+      // Child does not define typeAcquisition, should inherit from base
+      assert.deepEqual(result.config.typeAcquisition, { enable: true, include: ['jquery'] }, 'typeAcquisition should be inherited');
+    });
+  });
+
+  describe('JSONC support (comments and trailing commas)', () => {
+    var JSONC_DIR = path.join(DATA_DIR, 'jsonc');
+
+    it('should parse tsconfig with comments', () => {
+      // tsconfig.json supports JSONC format (JSON with comments)
+      var result = readSync(JSONC_DIR, 'with-comments.json');
+
+      assert.equal(result.config.compilerOptions.target, 'es2020', 'should parse target');
+      assert.equal(result.config.compilerOptions.module, 'esnext', 'should parse module');
+      assert.deepEqual(result.config.include, ['src'], 'should parse include');
+    });
+
+    it('should parse tsconfig with trailing commas', () => {
+      // tsconfig.json supports trailing commas
+      var result = readSync(JSONC_DIR, 'with-trailing-commas.json');
+
+      assert.equal(result.config.compilerOptions.target, 'es2020', 'should parse target');
+      assert.equal(result.config.compilerOptions.module, 'esnext', 'should parse module');
+      assert.deepEqual(result.config.include, ['src'], 'should parse include');
+    });
+  });
 });
