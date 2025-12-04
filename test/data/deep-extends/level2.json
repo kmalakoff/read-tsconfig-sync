@@ -1,0 +1,7 @@
+{
+  "extends": "./level1.json",
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs"
+  }
+}
