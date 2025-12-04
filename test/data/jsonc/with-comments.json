@@ -1,0 +1,9 @@
+{
+  // This is a line comment
+  "compilerOptions": {
+    "target": "es2020", // inline comment
+    /* block comment */
+    "module": "esnext"
+  },
+  "include": ["src"]
+}
