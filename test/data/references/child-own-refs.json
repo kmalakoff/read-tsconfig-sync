@@ -1,0 +1,9 @@
+{
+  "extends": "./base-with-refs.json",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "references": [
+    { "path": "../other" }
+  ]
+}
