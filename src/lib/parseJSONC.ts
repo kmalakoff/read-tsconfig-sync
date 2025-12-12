@@ -5,15 +5,15 @@
 // Compatible with Node 0.8+
 
 export default function parseJSONC(text: string): unknown {
-  var result = '';
-  var i = 0;
-  var len = text.length;
-  var inString = false;
-  var stringChar = '';
+  let result = '';
+  let i = 0;
+  const len = text.length;
+  let inString = false;
+  let stringChar = '';
 
   while (i < len) {
-    var char = text[i];
-    var next = text[i + 1];
+    const char = text[i];
+    const next = text[i + 1];
 
     // Handle string literals (don't strip comments inside strings)
     if (inString) {
