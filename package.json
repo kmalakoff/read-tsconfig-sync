@@ -44,19 +44,19 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "is-absolute": "*",
-    "module-root-sync": "*",
-    "remove-bom-buffer": "*",
-    "resolve": "*"
+    "is-absolute": "^1.0.0",
+    "module-root-sync": "^2.0.0",
+    "remove-bom-buffer": "^3.0.0",
+    "resolve": "^1.22.11"
   },
   "devDependencies": {
-    "@sourcegraph/tsconfig": "*",
-    "@types/mocha": "*",
-    "@types/node": "*",
-    "json-schema-to-typescript": "*",
-    "node-version-use": "*",
-    "ts-dev-stack": "*",
-    "tsds-config": "*"
+    "@sourcegraph/tsconfig": "^4.0.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.0.1",
+    "json-schema-to-typescript": "^15.0.4",
+    "node-version-use": "^2.1.5",
+    "ts-dev-stack": "^1.21.3",
+    "tsds-config": "^0.2.0"
   },
   "engines": {
     "node": ">=0.8"
