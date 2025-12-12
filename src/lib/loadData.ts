@@ -16,10 +16,10 @@ export default function loadData(specifier: string): TSConfig {
   const tsconfig = { path: specifier, config: parseJSONC(removeBOM(fs.readFileSync(specifier, 'utf8'))) as TSConfigSchema.TSConfigData };
   if (tsconfig.config.extends === undefined) return tsconfig;
 
-  var extendData = {};
-  var extendSpecifiers = isArray(tsconfig.config.extends) ? (tsconfig.config.extends as string[]).slice() : [tsconfig.config.extends as string];
+  let extendData = {};
+  const extendSpecifiers = isArray(tsconfig.config.extends) ? (tsconfig.config.extends as string[]).slice() : [tsconfig.config.extends as string];
   while (extendSpecifiers.length) {
-    var extendSpecifier = extendSpecifiers.shift();
+    let extendSpecifier = extendSpecifiers.shift();
     if (moduleRegEx.test(extendSpecifier)) {
       // For bare package names (no path separator), resolve package.json then derive tsconfig.json path
       const hasSubpath = pathRegEx.test(extendSpecifier);
