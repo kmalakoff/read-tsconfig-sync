@@ -11,22 +11,34 @@ const SRC_CONFIG = readSync(SRC_DIR, 'tsconfig.json');
 const ROOT_DIR = path.dirname(path.dirname(__dirname));
 const MODULE_CONFIG = readSync(path.join(ROOT_DIR, 'node_modules', '@sourcegraph', 'tsconfig', 'tsconfig.json'));
 const TSDS_CONFIG = readSync(path.join(ROOT_DIR, 'node_modules', 'tsds-config', 'tsconfig.json'));
+if (!SRC_CONFIG) throw new Error('no SRC_CONFIG');
+if (!SRC_CONFIG.config.compilerOptions) throw new Error('no SRC_CONFIG.compilerOptions');
+if (!MODULE_CONFIG) throw new Error('no MODULE_CONFIG');
+if (!MODULE_CONFIG.config.compilerOptions) throw new Error('no MODULE_CONFIG.compilerOptions');
+if (!TSDS_CONFIG) throw new Error('no TSDS_CONFIG');
+if (!TSDS_CONFIG.config.compilerOptions) throw new Error('no TSDS_CONFIG.compilerOptions');
 
 describe('read', () => {
   it('default name', () => {
     const tsconfigExtended = readSync(SRC_DIR);
+    if (!tsconfigExtended) throw new Error('no tsconfigExtended');
+    if (!tsconfigExtended.config.compilerOptions) throw new Error('no tsconfigExtended.compilerOptions');
     assert.equal(tsconfigExtended.path, path.join(path.dirname(SRC_DIR), 'tsconfig.json'));
     assert.deepEqual(tsconfigExtended.config, SRC_CONFIG.config);
   });
 
   it('extend-config.json', () => {
     const tsconfigExtended = readSync(SRC_DIR, 'extend-config.json');
+    if (!tsconfigExtended) throw new Error('no tsconfigExtended');
+    if (!tsconfigExtended.config.compilerOptions) throw new Error('no tsconfigExtended.compilerOptions');
     assert.equal(tsconfigExtended.path, path.join(path.dirname(SRC_DIR), 'extend-config.json'));
     assert.deepEqual(tsconfigExtended.config, SRC_CONFIG.config);
   });
 
   it('extend-absolute-config.json', () => {
     const tsconfigExtended = readSync(SRC_DIR, 'extend-absolute-config.json');
+    if (!tsconfigExtended) throw new Error('no tsconfigExtended');
+    if (!tsconfigExtended.config.compilerOptions) throw new Error('no tsconfigExtended.compilerOptions');
     assert.equal(tsconfigExtended.path, path.join(path.dirname(SRC_DIR), 'extend-absolute-config.json'));
     assert.equal(tsconfigExtended.config.compilerOptions.moduleResolution, 'classic');
     tsconfigExtended.config.compilerOptions.moduleResolution = 'node';
@@ -35,6 +47,8 @@ describe('read', () => {
 
   it('extend-absolute-config-file.json', () => {
     const tsconfigExtended = readSync(SRC_DIR, 'extend-absolute-config-file.json');
+    if (!tsconfigExtended) throw new Error('no tsconfigExtended');
+    if (!tsconfigExtended.config.compilerOptions) throw new Error('no tsconfigExtended.compilerOptions');
     assert.equal(tsconfigExtended.path, path.join(path.dirname(SRC_DIR), 'extend-absolute-config-file.json'));
     assert.equal(tsconfigExtended.config.compilerOptions.moduleResolution, 'classic');
     tsconfigExtended.config.compilerOptions.moduleResolution = 'node';
@@ -43,6 +57,8 @@ describe('read', () => {
 
   it('extend-relative-config-file.json', () => {
     const tsconfigExtended = readSync(SRC_DIR, 'extend-relative-config-file.json');
+    if (!tsconfigExtended) throw new Error('no tsconfigExtended');
+    if (!tsconfigExtended.config.compilerOptions) throw new Error('no tsconfigExtended.compilerOptions');
     assert.equal(tsconfigExtended.path, path.join(path.dirname(SRC_DIR), 'extend-relative-config-file.json'));
     assert.equal(tsconfigExtended.config.compilerOptions.moduleResolution, 'classic');
     tsconfigExtended.config.compilerOptions.moduleResolution = 'node';
@@ -55,6 +71,8 @@ describe('read', () => {
     // the regex with global flag returns true, then false, then true on subsequent calls
     for (let i = 0; i < 5; i++) {
       const tsconfigExtended = readSync(SRC_DIR, 'extend-absolute-config-file.json');
+      if (!tsconfigExtended) throw new Error('no tsconfigExtended');
+      if (!tsconfigExtended.config.compilerOptions) throw new Error('no tsconfigExtended.compilerOptions');
       assert.equal(tsconfigExtended.path, path.join(path.dirname(SRC_DIR), 'extend-absolute-config-file.json'), `Failed on iteration ${i}`);
       assert.equal(tsconfigExtended.config.compilerOptions.moduleResolution, 'classic', `Failed on iteration ${i}`);
     }
@@ -101,6 +119,8 @@ describe('module resolution', () => {
     // without a "main" field in package.json. The fix resolves package.json instead
     // of the bare package name, then derives the tsconfig.json path from its directory.
     const tsconfig = readSync(DATA_DIR, 'extend-no-main-pkg.json');
+    if (!tsconfig) throw new Error('no tsconfig');
+    if (!tsconfig.config.compilerOptions) throw new Error('no tsconfig.compilerOptions');
     assert.equal(tsconfig.path, path.join(DATA_DIR, 'extend-no-main-pkg.json'));
     assert.equal(tsconfig.config.compilerOptions.strict, true);
     assert.equal(tsconfig.config.compilerOptions.target, 'ES2020');
@@ -108,27 +128,35 @@ describe('module resolution', () => {
 
   it('extends non-scoped package (tsds-config)', () => {
     const tsconfig = readSync(DATA_DIR, 'extend-module.json');
+    if (!tsconfig) throw new Error('no tsconfig');
+    if (!tsconfig.config.compilerOptions) throw new Error('no tsconfig.compilerOptions');
     assert.equal(tsconfig.path, path.join(DATA_DIR, 'extend-module.json'));
     assert.equal(tsconfig.config.compilerOptions.strict, true);
     // Should inherit from tsds-config
-    assert.deepEqual(tsconfig.config.compilerOptions.lib, TSDS_CONFIG.config.compilerOptions.lib);
+    assert.deepEqual(tsconfig.config.compilerOptions.lib, (TSDS_CONFIG.config.compilerOptions as { lib: string[] }).lib);
   });
 
   it('extends non-scoped package with subpath (tsds-config/tsconfig.json)', () => {
     const tsconfig = readSync(DATA_DIR, 'extend-module-subpath.json');
+    if (!tsconfig) throw new Error('no tsconfig');
+    if (!tsconfig.config.compilerOptions) throw new Error('no tsconfig.compilerOptions');
     assert.equal(tsconfig.path, path.join(DATA_DIR, 'extend-module-subpath.json'));
     assert.equal(tsconfig.config.compilerOptions.strict, true);
     // Should inherit from tsds-config
-    assert.deepEqual(tsconfig.config.compilerOptions.lib, TSDS_CONFIG.config.compilerOptions.lib);
+    assert.deepEqual(tsconfig.config.compilerOptions.lib, (TSDS_CONFIG.config.compilerOptions as { lib: string[] }).lib);
   });
 
   it('extends scoped package (@sourcegraph/tsconfig)', () => {
     const tsconfig = readSync(SRC_DIR, 'extend-absolute-config.json');
+    if (!tsconfig) throw new Error('no tsconfig');
+    if (!tsconfig.config.compilerOptions) throw new Error('no tsconfig.compilerOptions');
     assert.equal(tsconfig.config.compilerOptions.moduleResolution, 'classic');
   });
 
   it('extends scoped package with subpath (@sourcegraph/tsconfig/tsconfig.json)', () => {
     const tsconfig = readSync(SRC_DIR, 'extend-absolute-config-file.json');
+    if (!tsconfig) throw new Error('no tsconfig');
+    if (!tsconfig.config.compilerOptions) throw new Error('no tsconfig.compilerOptions');
     assert.equal(tsconfig.config.compilerOptions.moduleResolution, 'classic');
   });
 });
