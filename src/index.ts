@@ -5,7 +5,7 @@ import type { TSConfig } from './types.ts';
 
 export * from './types.ts';
 
-export default function loadConfigSync(dir: string, name?: string): TSConfig {
+export default function loadConfigSync(dir: string, name?: string): TSConfig | null {
   if (name === undefined) name = 'tsconfig.json';
   let configDir: string | null = null;
   try {

@@ -2,12 +2,12 @@ import fs from 'fs';
 import isAbsolute from 'is-absolute';
 import path from 'path';
 import removeBOM from 'remove-bom-buffer';
-import * as resolve from 'resolve';
+import resolve from 'resolve';
 import type { TSConfig, TSConfigSchema } from '../types.ts';
 import mergeData from './mergeData.ts';
 import parseJSONC from './parseJSONC.ts';
 
-const resolveSync = (resolve.default ?? resolve).sync;
+const resolveSync = resolve.sync;
 const isArray = Array.isArray || ((x) => Object.prototype.toString.call(x) === '[object Array]');
 const moduleRegEx = /^[^./]|^\.[^./]|^\.\.[^/]/;
 const pathRegEx = /\\|\//;
@@ -19,7 +19,7 @@ export default function loadData(specifier: string): TSConfig {
   let extendData = {};
   const extendSpecifiers = isArray(tsconfig.config.extends) ? (tsconfig.config.extends as string[]).slice() : [tsconfig.config.extends as string];
   while (extendSpecifiers.length) {
-    let extendSpecifier = extendSpecifiers.shift();
+    let extendSpecifier = extendSpecifiers.shift() as string; // Avoid non-null assertion
     if (moduleRegEx.test(extendSpecifier)) {
       // For bare package names (no path separator), resolve package.json then derive tsconfig.json path
       const hasSubpath = pathRegEx.test(extendSpecifier);

@@ -17,6 +17,8 @@ describe('TypeScript tsconfig.json compliance', () => {
       // - child is applied last (overrides both)
       // So conflicting properties should come from base2, not base1
       const result = readSync(ARRAY_EXTENDS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // base1 has target: "es5", base2 has target: "es2020"
       // base2 should win since it comes later in the array
@@ -41,6 +43,8 @@ describe('TypeScript tsconfig.json compliance', () => {
     it('should replace include/exclude with last base that defines them', () => {
       // When child does not define include/exclude, it inherits from the last base that does
       const result = readSync(ARRAY_EXTENDS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // base2 defines include: ["base2-src"], which should override base1's include
       assert.deepEqual(result.config.include, ['base2-src'], 'include should be from base2 (last in extends array)');
@@ -49,6 +53,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should allow child to override inherited arrays', () => {
       const result = readSync(ARRAY_EXTENDS_DIR, 'child-with-include.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Child defines its own include, should replace inherited value
       assert.deepEqual(result.config.include, ['child-src'], 'child include should replace inherited include');
@@ -60,6 +66,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should merge compilerOptions (child overrides base)', () => {
       const result = readSync(MERGING_DIR, 'child-replaces-arrays.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Base has target: "es5", child has target: "es2020"
       assert.equal(result.config.compilerOptions.target, 'es2020', 'child target should override base');
@@ -70,6 +78,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should replace include array (not merge)', () => {
       const result = readSync(MERGING_DIR, 'child-replaces-arrays.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // TypeScript REPLACES arrays like include, exclude, files - does not merge them
       // Child has include: ["child-include"], should not include base's "base-include"
@@ -78,6 +88,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should replace files array (not merge)', () => {
       const result = readSync(MERGING_DIR, 'child-replaces-arrays.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Child has files: ["child-file.ts"], should not include base's "base-file.ts"
       assert.deepEqual(result.config.files, ['child-file.ts'], 'files should be replaced, not merged');
@@ -85,6 +97,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should inherit arrays when child does not define them', () => {
       const result = readSync(MERGING_DIR, 'child-no-override.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Child does not define include/exclude/files, should inherit from base
       assert.deepEqual(result.config.include, ['base-include'], 'should inherit include from base');
@@ -94,6 +108,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should inherit compilerOptions when child does not override', () => {
       const result = readSync(MERGING_DIR, 'child-no-override.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Base has target: "es5", child does not override
       assert.equal(result.config.compilerOptions.target, 'es5', 'should inherit target from base');
@@ -107,6 +123,8 @@ describe('TypeScript tsconfig.json compliance', () => {
   describe('extends removal', () => {
     it('should remove extends property from final config', () => {
       const result = readSync(DATA_DIR, 'extend-config.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
       assert.equal(result.config.extends, undefined, 'extends should be removed from final config');
     });
   });
@@ -117,6 +135,8 @@ describe('TypeScript tsconfig.json compliance', () => {
     it('should NOT inherit references from base config', () => {
       // TypeScript spec: references is excluded from inheritance
       const result = readSync(REFS_DIR, 'child-no-refs.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Base has references, child does not define any
       // Result should NOT have references (they are not inherited)
@@ -125,6 +145,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should use child references when defined', () => {
       const result = readSync(REFS_DIR, 'child-own-refs.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Child defines its own references
       assert.deepEqual(result.config.references, [{ path: '../other' }], 'child references should be used');
@@ -132,6 +154,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should inherit other properties while excluding references', () => {
       const result = readSync(REFS_DIR, 'child-no-refs.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // compilerOptions should still be inherited
       assert.equal(result.config.compilerOptions.composite, true, 'composite should be inherited');
@@ -145,6 +169,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should replace lib array (not merge)', () => {
       const result = readSync(ARRAYS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Base has lib: ["es5", "dom"], child has lib: ["es2020"]
       // Child's lib should completely replace base's lib
@@ -153,6 +179,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should replace paths object (not merge)', () => {
       const result = readSync(ARRAYS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Base has paths with @utils/* and @common/*, child has only @app/*
       // Child's paths should completely replace base's paths
@@ -161,6 +189,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should inherit arrays when child does not override', () => {
       const result = readSync(ARRAYS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Base has types: ["node", "jest"], child does not define types
       assert.deepEqual(result.config.compilerOptions.types, ['node', 'jest'], 'types should be inherited from base');
@@ -175,6 +205,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should resolve deep extends chain (A extends B extends C)', () => {
       const result = readSync(DEEP_DIR, 'level3.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // level1: target=es5, strict=true, include=["level1-src"]
       // level2 extends level1: target=es2015, module=commonjs
@@ -202,6 +234,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should replace watchOptions (not merge)', () => {
       const result = readSync(OPTIONS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Base has watchOptions with watchFile and watchDirectory
       // Child defines watchOptions with only watchFile
@@ -211,6 +245,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should inherit buildOptions when child does not define', () => {
       const result = readSync(OPTIONS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Child does not define buildOptions, should inherit from base
       assert.deepEqual(result.config.buildOptions, { verbose: true }, 'buildOptions should be inherited');
@@ -218,6 +254,8 @@ describe('TypeScript tsconfig.json compliance', () => {
 
     it('should inherit typeAcquisition when child does not define', () => {
       const result = readSync(OPTIONS_DIR, 'child.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       // Child does not define typeAcquisition, should inherit from base
       assert.deepEqual(result.config.typeAcquisition, { enable: true, include: ['jquery'] }, 'typeAcquisition should be inherited');
@@ -230,6 +268,8 @@ describe('TypeScript tsconfig.json compliance', () => {
     it('should parse tsconfig with comments', () => {
       // tsconfig.json supports JSONC format (JSON with comments)
       const result = readSync(JSONC_DIR, 'with-comments.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       assert.equal(result.config.compilerOptions.target, 'es2020', 'should parse target');
       assert.equal(result.config.compilerOptions.module, 'esnext', 'should parse module');
@@ -239,6 +279,8 @@ describe('TypeScript tsconfig.json compliance', () => {
     it('should parse tsconfig with trailing commas', () => {
       // tsconfig.json supports trailing commas
       const result = readSync(JSONC_DIR, 'with-trailing-commas.json');
+      if (!result) throw new Error('no result');
+      if (!result.config.compilerOptions) throw new Error('no compilerOptions');
 
       assert.equal(result.config.compilerOptions.target, 'es2020', 'should parse target');
       assert.equal(result.config.compilerOptions.module, 'esnext', 'should parse module');
