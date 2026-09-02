@@ -45,4 +45,15 @@ describe('read', () => {
     tsconfigExtended.config.compilerOptions.moduleResolution = 'node';
     assert.deepEqual(tsconfigExtended.config, MODULE_CONFIG.config);
   });
+
+  it('package subpath extends should work consistently across multiple calls', () => {
+    // This tests the global regex bug: /\\|\//g has state that causes alternating results
+    // When extends has a path separator (like @sourcegraph/tsconfig/tsconfig.json),
+    // the regex with global flag returns true, then false, then true on subsequent calls
+    for (let i = 0; i < 5; i++) {
+      const tsconfigExtended = readSync(SRC_DIR, 'extend-absolute-config-file.json');
+      assert.equal(tsconfigExtended.path, path.join(path.dirname(SRC_DIR), 'extend-absolute-config-file.json'), `Failed on iteration ${i}`);
+      assert.equal(tsconfigExtended.config.compilerOptions.moduleResolution, 'classic', `Failed on iteration ${i}`);
+    }
+  });
 });
