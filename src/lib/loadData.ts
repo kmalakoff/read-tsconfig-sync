@@ -8,7 +8,6 @@ import mergeData from './mergeData.ts';
 import parseJSONC from './parseJSONC.ts';
 
 const resolveSync = resolve.sync;
-const isArray = Array.isArray || ((x) => Object.prototype.toString.call(x) === '[object Array]');
 const moduleRegEx = /^[^./]|^\.[^./]|^\.\.[^/]/;
 const pathRegEx = /\\|\//;
 
@@ -17,7 +16,7 @@ export default function loadData(specifier: string): TSConfig {
   if (tsconfig.config.extends === undefined) return tsconfig;
 
   let extendData = {};
-  const extendSpecifiers = isArray(tsconfig.config.extends) ? (tsconfig.config.extends as string[]).slice() : [tsconfig.config.extends as string];
+  const extendSpecifiers = Array.isArray(tsconfig.config.extends) ? (tsconfig.config.extends as string[]).slice() : [tsconfig.config.extends as string];
   while (extendSpecifiers.length) {
     let extendSpecifier = extendSpecifiers.shift() as string; // Avoid non-null assertion
     if (moduleRegEx.test(extendSpecifier)) {

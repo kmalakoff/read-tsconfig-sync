@@ -55,7 +55,7 @@
     "@types/mocha": "*",
     "@types/node": "*",
     "@types/resolve": "^1.20.6",
-    "json-schema-to-typescript": "^15.0.4",
+    "json-schema-to-typescript": "^16.0.0",
     "node-version-use": "*",
     "ts-dev-stack": "*",
     "tsds-config": "*"

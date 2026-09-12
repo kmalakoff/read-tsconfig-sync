@@ -1,1 +1,1 @@
-ignores: ["node-version-use", "ts-dev-stack", "read-tsconfig-sync", "@sourcegraph/tsconfig"]
+ignores: ["read-tsconfig-sync", "node-version-use", "ts-dev-stack", "@sourcegraph/tsconfig"]
